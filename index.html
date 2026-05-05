@@ -241,6 +241,16 @@
   .ticker-item { font-family: 'Bebas Neue'; font-size: 14px; letter-spacing: 0.2em; color: var(--muted); padding: 0 2rem; display: flex; align-items: center; gap: 2rem; }
   .ticker-item::after { content: '◆'; font-size: 8px; color: var(--gold); margin-left: 2rem; }
   @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .project-impact { margin: 0.75rem 0 1.25rem; border-top: 1px solid rgba(201,168,76,0.08); padding-top: 0.75rem; }
+  .project-impact-label { font-family: 'JetBrains Mono'; font-size: 9px; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .project-impact ul { list-style: none; }
+  .project-impact li { font-size: 12px; color: var(--muted); line-height: 1.7; padding-left: 14px; position: relative; }
+  .project-impact li::before { content: '→'; position: absolute; left: 0; color: var(--gold); }
+  .impact-points { display: flex; flex-direction: column; background: rgba(201,168,76,0.04); border: 1px solid rgba(201,168,76,0.1); max-width: 760px; margin-top: 1rem; }
+  .impact-point { padding: 1.25rem 2rem 1.25rem 3.5rem; font-size: 14px; color: var(--muted); line-height: 1.7; border-bottom: 1px solid rgba(201,168,76,0.06); position: relative; }
+  .impact-point:last-child { border-bottom: none; }
+  .impact-point::before { content: '→'; position: absolute; left: 1.5rem; color: var(--gold); top: 1.35rem; }
+  .impact-point strong { color: var(--white); font-weight: 400; }
   @media (max-width: 900px) {
     nav { padding: 1.2rem 1.5rem; }
     .hero { padding: 6rem 1.5rem 2rem; }
@@ -275,7 +285,7 @@
   <div class="hero-content">
     <div class="hero-eyebrow">AI Automation & Systems Builder</div>
     <h1 class="hero-name">Automate.<br><span>Scale.</span></h1>
-    <p class="hero-tagline">I build AI-powered automation systems that improve marketing, sales, and operations by connecting tools, APIs, and workflows — turning manual business processes into efficient, scalable systems.</p>
+    <p class="hero-tagline">I design and build AI-powered systems that automate marketing, sales, and operations — reducing manual work, improving lead response time, and enabling businesses to scale without adding headcount. I don't just build automations — I design systems that improve how businesses operate.</p>
     <div class="hero-cta">
       <a href="#projects" class="btn-primary">View My Work</a>
       <a href="#contact" class="btn-outline">Get In Touch</a>
@@ -303,17 +313,17 @@
       <div class="section-label reveal">About</div>
       <h2 class="section-title reveal">Systems That<br>Drive Business<br>Results</h2>
       <div class="about-text reveal">
-        <p>I build <strong>AI-powered automation systems</strong> that help businesses reduce manual work, improve lead response time, and scale operations — without adding headcount.</p>
-        <p>My focus is on real business outcomes: connecting CRMs, communication tools, and AI models into <strong>end-to-end automation workflows</strong> that eliminate bottlenecks in marketing, sales, and operations.</p>
-        <p>Every system I build is designed around a measurable result — <strong>faster processes, lower operational cost, and higher efficiency</strong> across the entire business pipeline.</p>
+        <p><strong>I don't just build automations — I design systems that improve how businesses operate.</strong></p>
+        <p>My work focuses on identifying where manual processes slow a business down — in lead handling, internal communication, content production, or sales follow-up — and replacing those bottlenecks with <strong>automated, reliable workflows</strong>.</p>
+        <p>Every system I build has a clear business outcome: faster lead response, reduced operational overhead, or <strong>improved efficiency across marketing, sales, and operations</strong> — without increasing headcount.</p>
       </div>
     </div>
     <div class="skills-grid reveal">
-      <div class="skill-item">Make.com · Zapier · n8n</div><div class="skill-item">Workflow & Process Automation</div>
-      <div class="skill-item">Claude AI · ChatGPT · Gemini</div><div class="skill-item">AI Tool Integration</div>
-      <div class="skill-item">Vapi · ElevenLabs · Voice AI</div><div class="skill-item">Twilio · Slack · Gmail APIs</div>
-      <div class="skill-item">CRM & Lead Automation</div><div class="skill-item">API Integration & Webhooks</div>
-      <div class="skill-item">Next.js · JavaScript</div><div class="skill-item">Supabase · Database Systems</div>
+      <div class="skill-item">Automation & Systems</div><div class="skill-item">Make.com · Zapier · n8n</div>
+      <div class="skill-item">AI Tools</div><div class="skill-item">Claude AI · ChatGPT · Gemini</div>
+      <div class="skill-item">Voice AI</div><div class="skill-item">Vapi · ElevenLabs · Twilio</div>
+      <div class="skill-item">Integrations</div><div class="skill-item">Slack · Gmail · CRM APIs</div>
+      <div class="skill-item">Web & Data</div><div class="skill-item">Next.js · Supabase · JavaScript</div>
     </div>
   </div>
 </section>
@@ -328,7 +338,15 @@
       <div class="project-num">01</div>
       <div class="project-tag">Lead Automation</div>
       <div class="project-title">AI Lead Intake System</div>
-      <div class="project-desc">Captures and qualifies incoming leads automatically using AI voice and messaging. Eliminates manual intake work — leads are routed to the right workflow instantly, cutting response time from hours to seconds.</div>
+      <div class="project-desc">Automates inbound lead capture and qualification using AI voice and messaging. Every inquiry is instantly received, processed, and routed into the correct workflow — no manual handling required.</div>
+      <div class="project-impact">
+        <div class="project-impact-label">Business Impact</div>
+        <ul>
+          <li>Cuts lead response time from hours to seconds</li>
+          <li>Eliminates missed or delayed lead handling</li>
+          <li>Creates consistent qualification without manual effort</li>
+        </ul>
+      </div>
       <div class="project-tech"><span class="tech-tag">Vapi</span><span class="tech-tag">Make.com</span><span class="tech-tag">Twilio</span></div>
       <div class="project-arrow">↗</div>
     </div>
@@ -336,7 +354,15 @@
       <div class="project-num">02</div>
       <div class="project-tag">Marketing Operations</div>
       <div class="project-title">Marketing Automation System</div>
-      <div class="project-desc">Automates content generation, structuring, and multi-platform publishing. Removes repetitive marketing tasks from the team's workload and ensures consistent output without manual effort.</div>
+      <div class="project-desc">Automates content creation, structuring, and publishing across multiple platforms. Content is generated, formatted, and distributed on schedule — without manual involvement at every step.</div>
+      <div class="project-impact">
+        <div class="project-impact-label">Business Impact</div>
+        <ul>
+          <li>Removes hours of repetitive content work each week</li>
+          <li>Keeps output consistent without extra headcount</li>
+          <li>Frees the team to focus on strategy, not production</li>
+        </ul>
+      </div>
       <div class="project-tech"><span class="tech-tag">Make.com</span><span class="tech-tag">Claude AI</span><span class="tech-tag">ChatGPT</span></div>
       <div class="project-arrow">↗</div>
     </div>
@@ -344,15 +370,31 @@
       <div class="project-num">03</div>
       <div class="project-tag">Business Operations</div>
       <div class="project-title">Internal Workflow Automation</div>
-      <div class="project-desc">Connects Slack, Gmail, and internal tools into a unified automation pipeline. Automates task routing, status updates, and notifications — eliminating manual handoffs and reducing operational delays.</div>
+      <div class="project-desc">Connects Slack, Gmail, and internal tools into a single automated pipeline. Tasks route themselves, notifications trigger automatically, and updates happen without anyone manually coordinating them.</div>
+      <div class="project-impact">
+        <div class="project-impact-label">Business Impact</div>
+        <ul>
+          <li>Eliminates manual handoffs and coordination delays</li>
+          <li>Reduces errors from missed messages or forgotten tasks</li>
+          <li>Keeps operations running without micromanagement</li>
+        </ul>
+      </div>
       <div class="project-tech"><span class="tech-tag">Slack</span><span class="tech-tag">Gmail API</span><span class="tech-tag">Zapier</span></div>
       <div class="project-arrow">↗</div>
     </div>
     <div class="project-card reveal">
       <div class="project-num">04</div>
-      <div class="project-tag">Operations Dashboard</div>
+      <div class="project-tag">Operational Visibility</div>
       <div class="project-title">Automation Tracking Dashboard</div>
-      <div class="project-desc">Real-time web dashboard that tracks automation system performance and operational metrics. Gives business owners clear visibility into workflow status, lead volume, and process efficiency — all in one place.</div>
+      <div class="project-desc">Real-time web dashboard that surfaces automation performance, lead volume, and operational metrics in one place. Business owners see exactly how their systems are running — no manual report needed.</div>
+      <div class="project-impact">
+        <div class="project-impact-label">Business Impact</div>
+        <ul>
+          <li>Replaces manual reporting with live automated data</li>
+          <li>Gives decision-makers clear visibility into system performance</li>
+          <li>Surfaces bottlenecks before they grow into larger problems</li>
+        </ul>
+      </div>
       <div class="project-tech"><span class="tech-tag">Next.js</span><span class="tech-tag">Supabase</span><span class="tech-tag">JavaScript</span></div>
       <div class="project-arrow">↗</div>
     </div>
@@ -360,7 +402,15 @@
       <div class="project-num">05</div>
       <div class="project-tag">Sales Automation</div>
       <div class="project-title">CRM Automation Pipeline</div>
-      <div class="project-desc">End-to-end sales pipeline automation that syncs lead data, triggers follow-up sequences, and logs every interaction automatically. Reduces manual CRM work and ensures no lead falls through the cracks.</div>
+      <div class="project-desc">Automates the full sales pipeline — syncing lead data, triggering follow-up sequences, and logging every interaction. The CRM stays accurate and current without anyone manually entering data.</div>
+      <div class="project-impact">
+        <div class="project-impact-label">Business Impact</div>
+        <ul>
+          <li>Eliminates manual CRM updates and data entry</li>
+          <li>Ensures every lead receives timely, structured follow-up</li>
+          <li>Reduces leads falling through the cracks</li>
+        </ul>
+      </div>
       <div class="project-tech"><span class="tech-tag">Make.com</span><span class="tech-tag">CRM API</span><span class="tech-tag">Gmail API</span></div>
       <div class="project-arrow">↗</div>
     </div>
@@ -368,10 +418,32 @@
       <div class="project-num">06</div>
       <div class="project-tag">AI Voice System</div>
       <div class="project-title">AI Voice Receptionist</div>
-      <div class="project-desc">24/7 AI-powered voice system that handles inbound business calls, qualifies callers, collects key information, and routes to the right team — removing the need for a human receptionist on every call.</div>
+      <div class="project-desc">AI-powered voice system that handles inbound business calls 24/7. It greets callers, qualifies their needs, collects information, and routes them to the right person — completely automated.</div>
+      <div class="project-impact">
+        <div class="project-impact-label">Business Impact</div>
+        <ul>
+          <li>Operates 24/7 with zero staffing cost</li>
+          <li>Removes the need for a human on routine incoming calls</li>
+          <li>Delivers a consistent, professional experience at any call volume</li>
+        </ul>
+      </div>
       <div class="project-tech"><span class="tech-tag">Vapi</span><span class="tech-tag">ElevenLabs</span><span class="tech-tag">Twilio</span></div>
       <div class="project-arrow">↗</div>
     </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="impact">
+  <div class="section-label reveal">Results</div>
+  <h2 class="section-title reveal">Operational<br>Impact</h2>
+  <div class="impact-points reveal">
+    <div class="impact-point">Reduced manual administrative workload through <strong>end-to-end workflow automation</strong> — removing repetitive tasks from daily operations.</div>
+    <div class="impact-point">Improved <strong>lead response speed and consistency</strong> by replacing manual intake and follow-up with automated qualification systems.</div>
+    <div class="impact-point">Automated <strong>communication and follow-up workflows</strong> across email, voice, and messaging — ensuring nothing is missed or delayed.</div>
+    <div class="impact-point">Connected multiple tools and platforms into <strong>unified automation pipelines</strong> — eliminating data silos and manual coordination between systems.</div>
+    <div class="impact-point">Enabled <strong>more scalable business operations</strong> without increasing headcount — systems handle volume growth automatically.</div>
   </div>
 </section>
 
