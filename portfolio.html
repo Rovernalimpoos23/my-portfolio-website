@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Automation & Systems Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --gold: #C9A84C;
+    --gold-dim: #8a6f2e;
+    --white: #F0EDE6;
+    --off: #1a1814;
+    --surface: #111009;
+    --card: #181612;
+    --muted: #6b675e;
+    --accent: #e8c46a;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--surface);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  #cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 4rem;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    backdrop-filter: blur(20px);
+    background: rgba(17,16,9,0.6);
+  }
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 80% at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 50%, black 0%, transparent 100%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 130px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .hero-name span { color: var(--gold); }
+  .hero-tagline {
+    font-size: 16px; font-weight: 300;
+    color: var(--muted); line-height: 1.7;
+    margin-top: 1.5rem; max-width: 480px;
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .hero-cta {
+    margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  }
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--gold);
+    color: var(--surface);
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none; border: none;
+    cursor: none;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-outline {
+    padding: 13px 32px;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold);
+    font-size: 12px; font-weight: 400; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    cursor: none;
+    transition: border-color 0.3s, background 0.3s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .hero-stats {
+    position: absolute; right: 4rem; bottom: 4rem;
+    display: flex; flex-direction: column; gap: 2rem;
+    opacity: 0; animation: fadeUp 0.9s 1s forwards;
+  }
+  .stat { text-align: right; }
+  .stat-num { font-family: 'Bebas Neue'; font-size: 42px; color: var(--white); line-height: 1; }
+  .stat-label { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .stat-divider { width: 1px; height: 40px; background: rgba(201,168,76,0.2); align-self: flex-end; }
+  section { padding: 7rem 4rem; position: relative; }
+  .section-label {
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    letter-spacing: 0.3em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .section-title { font-family: 'Bebas Neue'; font-size: clamp(42px, 5vw, 72px); line-height: 1; color: var(--white); margin-bottom: 3rem; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .about-text { font-size: 15px; color: var(--muted); line-height: 1.9; }
+  .about-text p + p { margin-top: 1.2em; }
+  .about-text strong { color: var(--white); font-weight: 400; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.1); }
+  .skill-item { background: var(--card); padding: 1.2rem 1.5rem; font-family: 'JetBrains Mono'; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; transition: color 0.2s, background 0.2s; }
+  .skill-item:hover { color: var(--gold); background: rgba(201,168,76,0.04); }
+  .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(201,168,76,0.08); }
+  .project-card { background: var(--card); padding: 2.5rem 2rem; position: relative; overflow: hidden; cursor: none; transition: background 0.3s; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-card:hover { background: #1e1c15; }
+  .project-num { font-family: 'Bebas Neue'; font-size: 64px; color: rgba(201,168,76,0.08); line-height: 1; position: absolute; top: 1rem; right: 1.5rem; }
+  .project-tag { font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 1rem; }
+  .project-title { font-family: 'Bebas Neue'; font-size: 28px; color: var(--white); margin-bottom: 0.75rem; }
+  .project-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tech-tag { font-family: 'JetBrains Mono'; font-size: 10px; padding: 4px 10px; border: 1px solid rgba(201,168,76,0.2); color: var(--muted); letter-spacing: 0.05em; transition: border-color 0.2s, color 0.2s; }
+  .project-card:hover .tech-tag { border-color: rgba(201,168,76,0.4); color: var(--accent); }
+  .project-arrow { position: absolute; bottom: 2rem; right: 2rem; font-size: 20px; color: var(--gold); opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+  .project-card:hover .project-arrow { opacity: 1; transform: translate(3px, -3px); }
+  .videos-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .video-card { position: relative; overflow: hidden; background: var(--card); cursor: none; }
+  .video-thumb { aspect-ratio: 16/9; background: linear-gradient(135deg, #1e1c15 0%, #0e0d08 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: transform 0.5s; }
+  .video-card:hover .video-thumb { transform: scale(1.03); }
+  .video-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(17,16,9,0.9) 0%, transparent 60%); }
+  .play-btn { width: 48px; height: 48px; border: 1.5px solid rgba(201,168,76,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 14px; position: relative; z-index: 1; transition: background 0.3s, border-color 0.3s; }
+  .video-card:hover .play-btn { background: rgba(201,168,76,0.15); border-color: var(--gold); }
+  .video-info { padding: 1rem 1.25rem; }
+  .video-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 0.25rem; }
+  .video-meta { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+  .video-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.5s; }
+  .video-card:hover .video-bar { transform: scaleX(1); }
+  .contact-inner { max-width: 600px; margin: 0 auto; text-align: center; }
+  .contact-email { font-family: 'Bebas Neue'; font-size: clamp(28px, 4vw, 52px); color: var(--gold); text-decoration: none; letter-spacing: 0.05em; display: inline-block; margin: 2rem 0; transition: opacity 0.3s; }
+  .contact-email:hover { opacity: 0.7; }
+  .contact-text { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 3rem; }
+  .contact-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .contact-link { font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.3s; display: flex; align-items: center; gap: 8px; }
+  .contact-link:hover { color: var(--gold); }
+  .contact-link::before { content: '↗'; }
+  .contact-form { margin-top: 3rem; display: grid; gap: 1rem; text-align: left; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label { font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .form-input { background: var(--card); border: 1px solid rgba(201,168,76,0.15); color: var(--white); padding: 12px 16px; font-family: 'DM Sans'; font-size: 14px; outline: none; transition: border-color 0.3s; width: 100%; }
+  .form-input:focus { border-color: rgba(201,168,76,0.5); }
+  .form-input::placeholder { color: var(--muted); }
+  textarea.form-input { resize: vertical; min-height: 120px; }
+  .form-btn { padding: 14px 40px; background: var(--gold); color: var(--surface); font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; width: 100%; transition: opacity 0.2s, transform 0.2s; margin-top: 0.5rem; }
+  .form-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent); }
+  footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(201,168,76,0.08); }
+  .footer-text { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .ticker-wrap { overflow: hidden; padding: 1rem 0; background: rgba(201,168,76,0.04); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .ticker { display: flex; gap: 0; white-space: nowrap; animation: ticker 20s linear infinite; }
+  .ticker-item { font-family: 'Bebas Neue'; font-size: 14px; letter-spacing: 0.2em; color: var(--muted); padding: 0 2rem; display: flex; align-items: center; gap: 2rem; }
+  .ticker-item::after { content: '◆'; font-size: 8px; color: var(--gold); margin-left: 2rem; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 2rem; }
+    .hero-stats { position: static; flex-direction: row; margin-top: 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .videos-row { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <div class="nav-logo">Automate.Dev</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#videos">Content</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">AI Automation & Systems Builder</div>
+    <h1 class="hero-name">AI<br><span>Systems</span></h1>
+    <p class="hero-tagline">I design and build AI-powered automation systems that connect business tools, APIs, and AI models to improve marketing, sales, and operational efficiency.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Systems Built</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num">AI</div><div class="stat-label">Powered</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num">PH</div><div class="stat-label">Based</div></div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">Make.com</span><span class="ticker-item">Claude AI</span><span class="ticker-item">Vapi</span><span class="ticker-item">Twilio</span><span class="ticker-item">ElevenLabs</span><span class="ticker-item">Supabase</span><span class="ticker-item">Next.js</span><span class="ticker-item">Zapier</span>
+    <span class="ticker-item">Make.com</span><span class="ticker-item">Claude AI</span><span class="ticker-item">Vapi</span><span class="ticker-item">Twilio</span><span class="ticker-item">ElevenLabs</span><span class="ticker-item">Supabase</span><span class="ticker-item">Next.js</span><span class="ticker-item">Zapier</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <div class="section-label reveal">About</div>
+      <h2 class="section-title reveal">Building<br>AI-Powered<br>Systems</h2>
+      <div class="about-text reveal">
+        <p>I am an AI automation and systems builder focused on creating <strong>practical, real-world automation solutions</strong> for businesses.</p>
+        <p>My work involves designing workflows that connect tools like CRMs, communication platforms, and AI systems into <strong>unified automation pipelines</strong> that reduce manual work and improve efficiency.</p>
+        <p>I specialize in turning manual business processes into automated systems that <strong>reduce workload, increase speed, and improve decision-making</strong> — without increasing headcount.</p>
+      </div>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-item">AI Workflow Automation</div><div class="skill-item">Business Process Automation</div>
+      <div class="skill-item">API Integration</div><div class="skill-item">CRM Automation</div>
+      <div class="skill-item">Marketing Automation</div><div class="skill-item">Sales Workflow Optimization</div>
+      <div class="skill-item">Make.com / Zapier</div><div class="skill-item">Claude / ChatGPT / Gemini</div>
+      <div class="skill-item">Web Dev (React / Next.js)</div><div class="skill-item">Supabase / Database Systems</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="projects">
+  <div class="section-label reveal">Selected Work</div>
+  <h2 class="section-title reveal">Systems</h2>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-num">01</div>
+      <div class="project-tag">Lead Automation</div>
+      <div class="project-title">AI Lead Intake System</div>
+      <div class="project-desc">Automated system that captures and processes incoming customer inquiries using AI voice and messaging tools. Routes leads instantly to the correct workflow and reduces response time significantly.</div>
+      <div class="project-tech"><span class="tech-tag">Vapi</span><span class="tech-tag">Make.com</span><span class="tech-tag">Twilio</span></div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-num">02</div>
+      <div class="project-tag">Marketing Ops</div>
+      <div class="project-title">Marketing Automation System</div>
+      <div class="project-desc">Designed workflows that automate content generation, structuring, and repurposing across platforms to improve content output consistency and reduce time spent on repetitive publishing tasks.</div>
+      <div class="project-tech"><span class="tech-tag">Make.com</span><span class="tech-tag">Claude AI</span><span class="tech-tag">ChatGPT</span></div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-num">03</div>
+      <div class="project-tag">Operations Tool</div>
+      <div class="project-title">Business Workflow Automation</div>
+      <div class="project-desc">Created automation systems that connect communication tools like Slack and Gmail to automate task routing, notifications, and internal workflows — eliminating manual handoffs across teams.</div>
+      <div class="project-tech"><span class="tech-tag">Slack</span><span class="tech-tag">Gmail API</span><span class="tech-tag">Zapier</span></div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-num">04</div>
+      <div class="project-tag">Dashboard</div>
+      <div class="project-title">Custom Web Dashboard</div>
+      <div class="project-desc">Developed simple web-based dashboards using modern web technologies and backend tools to track automation system data and operational metrics in real time.</div>
+      <div class="project-tech"><span class="tech-tag">Next.js</span><span class="tech-tag">Supabase</span><span class="tech-tag">JavaScript</span></div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-num">05</div>
+      <div class="project-tag">Sales Automation</div>
+      <div class="project-title">CRM Automation Pipeline</div>
+      <div class="project-desc">Built an end-to-end sales pipeline automation system that syncs lead data across CRM tools, triggers follow-up sequences, and surfaces insights — reducing manual sales admin work.</div>
+      <div class="project-tech"><span class="tech-tag">Make.com</span><span class="tech-tag">CRM API</span><span class="tech-tag">Gmail API</span></div>
+      <div class="project-arrow">↗</div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-num">06</div>
+      <div class="project-tag">AI Integration</div>
+      <div class="project-title">AI Voice Receptionist</div>
+      <div class="project-desc">Deployed an AI-powered voice receptionist that handles inbound business calls, qualifies callers, captures information, and routes to the right team — available 24/7 without human intervention.</div>
+      <div class="project-tech"><span class="tech-tag">Vapi</span><span class="tech-tag">ElevenLabs</span><span class="tech-tag">Twilio</span></div>
+      <div class="project-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="videos">
+  <div class="section-label reveal">Content</div>
+  <h2 class="section-title reveal">Guides & Tutorials</h2>
+  <div class="videos-row reveal">
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div></div>
+      <div class="video-bar"></div>
+      <div class="video-info"><div class="video-title">Build an AI Lead Intake System</div><div class="video-meta">Automation · Step-by-Step</div></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div></div>
+      <div class="video-bar"></div>
+      <div class="video-info"><div class="video-title">Make.com Automation Masterclass</div><div class="video-meta">No-Code · Workflow Automation</div></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div></div>
+      <div class="video-bar"></div>
+      <div class="video-info"><div class="video-title">AI Business Automation Guide</div><div class="video-meta">Strategy · AI Tools · Systems</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label reveal" style="justify-content:center;">Let's Talk</div>
+    <h2 class="section-title reveal">Got a Project<br>In Mind?</h2>
+    <p class="contact-text reveal">Whether you need an automation system built, want to streamline a business process, or want to integrate AI into your operations — I'm open to the right opportunities.</p>
+    <a href="mailto:your-email@example.com" class="contact-email reveal">your-email@example.com</a>
+    <div class="contact-links reveal">
+      <a href="https://linkedin.com" class="contact-link" target="_blank">LinkedIn</a>
+      <a href="https://github.com" class="contact-link" target="_blank">GitHub</a>
+    </div>
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" placeholder="Your name"></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="you@company.com"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Budget Range</label><input type="text" class="form-input" placeholder="e.g. $500 — $2,000"></div>
+      <div class="form-group"><label class="form-label">Tell me about your project</label><textarea class="form-input" placeholder="What process do you want to automate?"></textarea></div>
+      <button type="submit" class="form-btn">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">AI Automation & Systems Builder · Philippines</div>
+  <div class="footer-text">Designed & Built with intention</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  document.querySelectorAll('a, button, .project-card, .video-card, .skill-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width='16px'; cursor.style.height='16px'; ring.style.width='56px'; ring.style.height='56px'; ring.style.marginLeft='-10px'; ring.style.marginTop='-10px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; ring.style.marginLeft='0'; ring.style.marginTop='0'; });
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { e.target.style.transitionDelay = (i * 0.05) + 's'; e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach(el => obs.observe(el));
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-btn');
+    btn.textContent = 'Message Sent ✓';
+    btn.style.background = 'rgba(201,168,76,0.3)';
+    btn.style.color = 'var(--gold)';
+    btn.style.border = '1px solid var(--gold)';
+    setTimeout(() => {
+      btn.textContent = 'Send Message →';
+      btn.style.background = 'var(--gold)';
+      btn.style.color = 'var(--surface)';
+      btn.style.border = 'none';
+    }, 3000);
+  }
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--white)' : ''; });
+  });
+</script>
+</body>
+</html>
