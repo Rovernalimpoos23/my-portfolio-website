@@ -124,7 +124,38 @@
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 70% at 60% 50%, black 0%, transparent 100%);
   }
-  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-inner {
+    position: relative; z-index: 1;
+    display: flex; align-items: center;
+    gap: 5rem; width: 100%;
+  }
+  .hero-content { flex: 1; min-width: 0; }
+  .hero-photo {
+    flex-shrink: 0;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-photo img {
+    width: 300px; height: 300px;
+    object-fit: cover; object-position: top center;
+    border-radius: 50%;
+    border: 2px solid rgba(0,212,255,0.45);
+    box-shadow:
+      0 0 0 8px rgba(0,212,255,0.06),
+      0 0 32px rgba(0,212,255,0.3),
+      0 0 72px rgba(0,212,255,0.12);
+    display: block;
+    animation: photoglow 3s ease-in-out infinite;
+  }
+  @keyframes photoglow {
+    0%, 100% {
+      box-shadow: 0 0 0 8px rgba(0,212,255,0.06), 0 0 32px rgba(0,212,255,0.3), 0 0 72px rgba(0,212,255,0.12);
+      border-color: rgba(0,212,255,0.45);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(0,212,255,0.1), 0 0 48px rgba(0,212,255,0.5), 0 0 96px rgba(0,212,255,0.2);
+      border-color: rgba(0,212,255,0.75);
+    }
+  }
   .hero-eyebrow {
     font-family: 'DM Mono', monospace;
     font-size: 11px; letter-spacing: 0.3em;
@@ -417,7 +448,9 @@
     .nav-links a { display: block; padding: 1.1rem 0; font-size: 15px; letter-spacing: 0.18em; color: var(--muted); }
     .nav-links a:hover { color: var(--white); }
     .hero { padding: 6rem 1.2rem 3rem; min-height: auto; }
+    .hero-inner { flex-direction: column-reverse; gap: 2rem; align-items: center; }
     .hero-content { max-width: 100%; }
+    .hero-photo img { width: 160px; height: 160px; }
     .hero-name { font-size: clamp(52px, 14vw, 90px); }
     .hero-tagline { font-size: 14px; max-width: 100%; }
     .hero-cta { flex-direction: column; gap: 0.75rem; }
@@ -467,13 +500,18 @@
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">AI Automation & Systems Builder</div>
-    <h1 class="hero-name">Automate.<br><span>Scale.</span></h1>
-    <p class="hero-tagline">I design and build AI-powered systems that automate marketing, sales, and operations — reducing manual work, improving lead response time, and enabling businesses to scale without adding headcount. I don't just build automations — I design systems that improve how businesses operate.</p>
-    <div class="hero-cta">
-      <a href="#projects" class="btn-primary">View My Work</a>
-      <a href="#contact" class="btn-outline">Get In Touch</a>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">AI Automation & Systems Builder</div>
+      <h1 class="hero-name">Automate.<br><span>Scale.</span></h1>
+      <p class="hero-tagline">I design and build AI-powered systems that automate marketing, sales, and operations — reducing manual work, improving lead response time, and enabling businesses to scale without adding headcount. I don't just build automations — I design systems that improve how businesses operate.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="images/photo.jpg" alt="Rovern John Alimpoos">
     </div>
   </div>
   <div class="hero-stats">
