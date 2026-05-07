@@ -235,6 +235,11 @@
   textarea.form-input { resize: vertical; min-height: 120px; }
   .form-btn { padding: 14px 40px; background: var(--gold); color: var(--surface); font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; width: 100%; transition: opacity 0.2s, transform 0.2s; margin-top: 0.5rem; }
   .form-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .form-btn:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
+  .form-success { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; padding: 3rem 2rem; background: var(--card); border: 1px solid rgba(201,168,76,0.25); text-align: center; }
+  .form-success-icon { width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 22px; }
+  .form-success-text { font-family: 'DM Sans'; font-size: 15px; font-weight: 300; color: var(--white); line-height: 1.7; }
+  .form-success-text strong { font-weight: 500; color: var(--gold); }
   .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent); }
   footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(201,168,76,0.08); }
   .footer-text { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
@@ -564,8 +569,11 @@
       <a href="https://linkedin.com" class="contact-link" target="_blank">LinkedIn</a>
       <a href="https://github.com" class="contact-link" target="_blank">GitHub</a>
     </div>
-    <form class="contact-form reveal" action="https://formspree.io/f/xdabdjbq" method="POST">
-      <input type="hidden" name="_next" value="https://my-portfolio-website-mu-seven.vercel.app/#contact">
+    <div class="form-success" id="form-success">
+      <div class="form-success-icon">&#10003;</div>
+      <p class="form-success-text"><strong>Message sent!</strong><br>I'll get back to you within 24 hours.</p>
+    </div>
+    <form class="contact-form reveal" id="contact-form">
       <div class="form-row">
         <div class="form-group"><label class="form-label">Name</label><input type="text" name="name" class="form-input" placeholder="Your name"></div>
         <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-input" placeholder="you@company.com"></div>
@@ -607,20 +615,31 @@
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
   reveals.forEach(el => obs.observe(el));
-  function handleSubmit(e) {
+  const contactForm = document.getElementById('contact-form');
+  const formSuccess = document.getElementById('form-success');
+  contactForm.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('.form-btn');
-    btn.textContent = 'Message Sent ✓';
-    btn.style.background = 'rgba(201,168,76,0.3)';
-    btn.style.color = 'var(--gold)';
-    btn.style.border = '1px solid var(--gold)';
-    setTimeout(() => {
-      btn.textContent = 'Send Message →';
-      btn.style.background = 'var(--gold)';
-      btn.style.color = 'var(--surface)';
-      btn.style.border = 'none';
-    }, 3000);
-  }
+    const btn = this.querySelector('.form-btn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/xdabdjbq', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(this)
+      });
+      if (res.ok) {
+        contactForm.style.display = 'none';
+        formSuccess.style.display = 'flex';
+      } else {
+        btn.textContent = 'Error — Try Again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Error — Try Again';
+      btn.disabled = false;
+    }
+  });
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
