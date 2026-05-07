@@ -185,18 +185,23 @@
   .skill-item { background: var(--card); padding: 1.2rem 1.5rem; font-family: 'JetBrains Mono'; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; transition: color 0.2s, background 0.2s; }
   .skill-item:hover { color: var(--gold); background: rgba(201,168,76,0.04); }
   .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(201,168,76,0.08); }
-  .project-card { background: var(--card); padding: 2.5rem 2rem; position: relative; overflow: hidden; cursor: none; transition: background 0.3s; }
-  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+  .project-card { background: var(--card); padding: 0; position: relative; overflow: hidden; cursor: none; transition: background 0.3s; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; z-index: 2; }
   .project-card:hover::before { transform: scaleX(1); }
   .project-card:hover { background: #1e1c15; }
-  .project-num { font-family: 'Bebas Neue'; font-size: 64px; color: rgba(201,168,76,0.08); line-height: 1; position: absolute; top: 1rem; right: 1.5rem; }
+  .project-img { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+  .project-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; filter: brightness(0.75) saturate(0.8); }
+  .project-card:hover .project-img img { transform: scale(1.04); filter: brightness(0.65) saturate(0.75); }
+  .project-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(17,16,9,0.15) 0%, rgba(17,16,9,0.85) 100%); }
+  .project-body { padding: 2rem 2rem 2.5rem; }
+  .project-num { font-family: 'Bebas Neue'; font-size: 64px; color: rgba(201,168,76,0.55); line-height: 1; position: absolute; top: 0.75rem; right: 1.25rem; z-index: 1; text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
   .project-tag { font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 1rem; }
   .project-title { font-family: 'Bebas Neue'; font-size: 28px; color: var(--white); margin-bottom: 0.75rem; }
   .project-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
   .project-tech { display: flex; flex-wrap: wrap; gap: 8px; }
   .tech-tag { font-family: 'JetBrains Mono'; font-size: 10px; padding: 4px 10px; border: 1px solid rgba(201,168,76,0.2); color: var(--muted); letter-spacing: 0.05em; transition: border-color 0.2s, color 0.2s; }
   .project-card:hover .tech-tag { border-color: rgba(201,168,76,0.4); color: var(--accent); }
-  .project-arrow { position: absolute; bottom: 2rem; right: 2rem; font-size: 20px; color: var(--gold); opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+  .project-arrow { display: block; text-align: right; font-size: 20px; color: var(--gold); opacity: 0; margin-top: 1rem; transition: opacity 0.3s, transform 0.3s; }
   .project-card:hover .project-arrow { opacity: 1; transform: translate(3px, -3px); }
   .videos-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
   .video-card { position: relative; overflow: hidden; background: var(--card); cursor: none; }
@@ -335,36 +340,56 @@
   <h2 class="section-title reveal">Systems I've Built</h2>
   <div class="projects-grid">
     <div class="project-card reveal">
-      <div class="project-num">01</div>
-      <div class="project-tag">AI Voice Tech</div>
-      <div class="project-title">AI Voice Receptionist System</div>
-      <div class="project-desc">Deployed an AI-powered voice receptionist that handles inbound business calls 24/7 without human intervention. The system greets callers, qualifies them based on their needs, captures key information, and automatically routes them to the right team or workflow. Built using AI voice technology combined with automation tools to create a seamless, human-like experience — reducing missed calls and eliminating the need for a dedicated front desk.</div>
-      <div class="project-tech"><span class="tech-tag">Vapi</span><span class="tech-tag">ElevenLabs</span><span class="tech-tag">Twilio</span><span class="tech-tag">Make.com</span></div>
-      <div class="project-arrow">↗</div>
+      <div class="project-img">
+        <div class="project-num">01</div>
+        <img src="images/ai-receptionist.jpg" alt="AI Voice Receptionist System">
+      </div>
+      <div class="project-body">
+        <div class="project-tag">AI Voice Tech</div>
+        <div class="project-title">AI Voice Receptionist System</div>
+        <div class="project-desc">Deployed an AI-powered voice receptionist that handles inbound business calls 24/7 without human intervention. The system greets callers, qualifies them based on their needs, captures key information, and automatically routes them to the right team or workflow. Built using AI voice technology combined with automation tools to create a seamless, human-like experience — reducing missed calls and eliminating the need for a dedicated front desk.</div>
+        <div class="project-tech"><span class="tech-tag">Vapi</span><span class="tech-tag">ElevenLabs</span><span class="tech-tag">Twilio</span><span class="tech-tag">Make.com</span></div>
+        <div class="project-arrow">↗</div>
+      </div>
     </div>
     <div class="project-card reveal">
-      <div class="project-num">02</div>
-      <div class="project-tag">Automation System</div>
-      <div class="project-title">Vendor Invoice Automation System</div>
-      <div class="project-desc">Built an end-to-end vendor invoice automation system specifically for construction teams struggling with invoice chaos across email, spreadsheets, and WhatsApp. The system automatically captures invoices from email, centralizes them into a live branded dashboard, tracks approval status in real time, flags duplicate invoices before payment, and shows exactly what's pending, approved, and paid — all without touching the existing accounting setup.</div>
-      <div class="project-tech"><span class="tech-tag">Make.com</span><span class="tech-tag">Gmail API</span><span class="tech-tag">Supabase</span><span class="tech-tag">Claude AI</span></div>
-      <div class="project-arrow">↗</div>
+      <div class="project-img">
+        <div class="project-num">02</div>
+        <img src="images/vendor-invoice.jpg" alt="Vendor Invoice Automation System">
+      </div>
+      <div class="project-body">
+        <div class="project-tag">Automation System</div>
+        <div class="project-title">Vendor Invoice Automation System</div>
+        <div class="project-desc">Built an end-to-end vendor invoice automation system specifically for construction teams struggling with invoice chaos across email, spreadsheets, and WhatsApp. The system automatically captures invoices from email, centralizes them into a live branded dashboard, tracks approval status in real time, flags duplicate invoices before payment, and shows exactly what's pending, approved, and paid — all without touching the existing accounting setup.</div>
+        <div class="project-tech"><span class="tech-tag">Make.com</span><span class="tech-tag">Gmail API</span><span class="tech-tag">Supabase</span><span class="tech-tag">Claude AI</span></div>
+        <div class="project-arrow">↗</div>
+      </div>
     </div>
     <div class="project-card reveal">
-      <div class="project-num">03</div>
-      <div class="project-tag">Full Stack + SEO</div>
-      <div class="project-title">RankFlow — Local SEO Command Center</div>
-      <div class="project-desc">Built a full stack local SEO command center for a service-based business. Automates the entire workflow from field operations to Google ranking. Features include real-time Google 3-Pack keyword ranking tracker, automated geo-stamped photo posting to Google Business Profile, one-click approval dashboard, automated 5-touch Google review SMS sequence, and a live performance dashboard pulling daily data from Google Business Profile.</div>
-      <div class="project-tech"><span class="tech-tag">Next.js</span><span class="tech-tag">Supabase</span><span class="tech-tag">Google API</span><span class="tech-tag">Make.com</span></div>
-      <div class="project-arrow">↗</div>
+      <div class="project-img">
+        <div class="project-num">03</div>
+        <img src="images/rankflow.jpg" alt="RankFlow — Local SEO Command Center">
+      </div>
+      <div class="project-body">
+        <div class="project-tag">Full Stack + SEO</div>
+        <div class="project-title">RankFlow — Local SEO Command Center</div>
+        <div class="project-desc">Built a full stack local SEO command center for a service-based business. Automates the entire workflow from field operations to Google ranking. Features include real-time Google 3-Pack keyword ranking tracker, automated geo-stamped photo posting to Google Business Profile, one-click approval dashboard, automated 5-touch Google review SMS sequence, and a live performance dashboard pulling daily data from Google Business Profile.</div>
+        <div class="project-tech"><span class="tech-tag">Next.js</span><span class="tech-tag">Supabase</span><span class="tech-tag">Google API</span><span class="tech-tag">Make.com</span></div>
+        <div class="project-arrow">↗</div>
+      </div>
     </div>
     <div class="project-card reveal">
-      <div class="project-num">04</div>
-      <div class="project-tag">SaaS Platform</div>
-      <div class="project-title">Field Service Clock-In / Clock-Out</div>
-      <div class="project-desc">Built a full-stack multi-tenant SaaS platform for field service businesses from scratch as a solo developer. Consists of two apps — an owner dashboard and a worker mobile app — connected to a shared Supabase PostgreSQL backend. Owner dashboard features real-time crew tracking, job costing with live profit margins, quotes, invoicing, client portal, payroll summary, and scheduling. Worker app features PIN authentication, live clock-in timer, scheduled job display, and site photo upload. Installable as a PWA on Android and iPhone.</div>
-      <div class="project-tech"><span class="tech-tag">Next.js</span><span class="tech-tag">Supabase</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">PWA</span></div>
-      <div class="project-arrow">↗</div>
+      <div class="project-img">
+        <div class="project-num">04</div>
+        <img src="images/field-service.jpg" alt="Field Service Clock-In / Clock-Out">
+      </div>
+      <div class="project-body">
+        <div class="project-tag">SaaS Platform</div>
+        <div class="project-title">Field Service Clock-In / Clock-Out</div>
+        <div class="project-desc">Built a full-stack multi-tenant SaaS platform for field service businesses from scratch as a solo developer. Consists of two apps — an owner dashboard and a worker mobile app — connected to a shared Supabase PostgreSQL backend. Owner dashboard features real-time crew tracking, job costing with live profit margins, quotes, invoicing, client portal, payroll summary, and scheduling. Worker app features PIN authentication, live clock-in timer, scheduled job display, and site photo upload. Installable as a PWA on Android and iPhone.</div>
+        <div class="project-tech"><span class="tech-tag">Next.js</span><span class="tech-tag">Supabase</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">PWA</span></div>
+        <div class="project-arrow">↗</div>
+      </div>
     </div>
   </div>
 </section>
