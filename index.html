@@ -225,11 +225,11 @@
     box-shadow: 0 0 14px rgba(0,212,255,0.15);
   }
   .hero-stats {
-    position: absolute; right: 4rem; bottom: 4rem;
-    display: flex; flex-direction: column; gap: 2rem;
+    display: flex; flex-direction: row; gap: 2rem; align-items: center;
+    margin-top: 2.5rem;
     opacity: 0; animation: fadeUp 0.9s 1s forwards;
   }
-  .stat { text-align: right; }
+  .stat { text-align: left; }
   .stat-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 42px; color: var(--white); line-height: 1; }
   .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
   .stat-divider { width: 1px; height: 40px; background: rgba(0,212,255,0.2); align-self: flex-end; }
@@ -416,7 +416,7 @@
     .hero-cta { flex-direction: row; gap: 1rem; }
     .btn-primary { display: inline-block; width: auto; padding: 14px 32px; min-height: auto; line-height: normal; }
     .btn-outline { display: inline-block; width: auto; padding: 13px 32px; min-height: auto; line-height: normal; }
-    .hero-stats { position: absolute; right: 4rem; bottom: 4rem; flex-direction: column; gap: 2rem; margin-top: 0; flex-wrap: nowrap; justify-content: flex-start; }
+    .hero-stats { display: flex; flex-direction: row; gap: 2rem; align-items: center; margin-top: 2.5rem; }
     .stat-divider { display: block; }
     section { padding: 7rem 4rem; }
     .about-grid { grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
@@ -450,12 +450,13 @@
     .hero { padding: 6rem 1.2rem 3rem; min-height: auto; }
     .hero-inner { flex-direction: column-reverse; gap: 2rem; align-items: center; }
     .hero-content { max-width: 100%; }
-    .hero-photo img { width: 160px; height: 160px; }
-    .hero-name { font-size: clamp(52px, 14vw, 90px); }
+    .hero-photo { display: flex; justify-content: center; }
+    .hero-photo img { width: 140px; height: 140px; max-width: 160px; }
+    .hero-name { font-size: clamp(48px, 10vw, 110px); }
     .hero-tagline { font-size: 14px; max-width: 100%; }
     .hero-cta { flex-direction: column; gap: 0.75rem; }
     .btn-primary, .btn-outline { display: block; text-align: center; width: 100%; min-height: 48px; line-height: 48px; padding: 0 24px; box-sizing: border-box; }
-    .hero-stats { position: static; flex-direction: row; flex-wrap: wrap; gap: 1.2rem; margin-top: 2.5rem; justify-content: flex-start; }
+    .hero-stats { display: none; }
     .stat-divider { display: none; }
     section { padding: 3.5rem 1.2rem; }
     .about-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -509,17 +510,17 @@
         <a href="#projects" class="btn-primary">View My Work</a>
         <a href="#contact" class="btn-outline">Get In Touch</a>
       </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Systems Built</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num">AI</div><div class="stat-label">Powered</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Systems Running</div></div>
+      </div>
     </div>
     <div class="hero-photo">
       <img src="images/photo.jpg" alt="Rovern John Alimpoos">
     </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Systems Built</div></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><div class="stat-num">AI</div><div class="stat-label">Powered</div></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">→ Automated</div></div>
   </div>
 </section>
 
